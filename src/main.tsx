@@ -21,6 +21,7 @@ Access,
   Else,
   ElseIf,
   Enum,
+  FunctionItemUntyped,
   Gt,
   If,
   Img,
@@ -164,48 +165,6 @@ const Fig = makeFigureMacro(ctx, {
   },
 });
 
-// A counter shared by several theorem-like blocks.
-const thmCounter = new Counter("thm-counter", 0);
-
-const Definition = makeFigureMacro(ctx, {
-  figureCounter: thmCounter,
-  numberingInfo: {
-    r: "Definition",
-    rb: "Definition",
-    rs: "Definition",
-    rsb: "Definition",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
-const Example = makeFigureMacro(ctx, {
-  figureCounter: thmCounter, // Shares the same counter as the `Theorem` macro.
-  numberingInfo: {
-    r: "Example",
-    rb: "Example",
-    rs: "Examples",
-    rsb: "Examples",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
-// Exercises are rendered as theorem-like blocks, but do not share the same counter.
-const exerciseCounter = new Counter("exercise-counter", 0);
-
-const Exercise = makeFigureMacro(ctx, {
-  figureCounter: exerciseCounter, // Different counter than the `Theorem` macro.
-  numberingInfo: {
-    r: "Exercise",
-    rb: "Exercise",
-    rs: "Exercises",
-    rsb: "Exercises",
-    render: makeNumberingRenderer(),
-  },
-  isTheoremLike: true,
-});
-
 // The full input to Macromania is a single expression, which we then evaluate.
 const exp = (
   <ArticleTemplate
@@ -213,21 +172,7 @@ const exp = (
     titleId="title"
     abstract={
       <>
-        <P>
-          <Wip inline>TODO</Wip>
-        </P>
-      </>
-    }
-    authors={[
-      {
-        name: "Aljoscha Meyer",
-        affiliation: "TU Berlin",
-        email: "mail@aljoscha-meyer.de",
-      },
-    ]}
-  >
-    <Hsection n="introduction" title="Introduction">
-      <PreviewScope>
+        <PreviewScope>
         <P>
           <Bib item="meyer2023sok">Prefix authentication schemes</Bib> — aka append-only logs, or transparency logs — are cryptographic schemes to efficiently authenticate total ordering between events. For any two events from a single event stream, you can provide a short digest to certify that one happened before the other (as opposed to them happening concurrently). <Def n="name" r="reed">Reed</Def> is a lightweigh specification for implementing the <Bib item="meyer2023better"><M>SLLS_3</M> scheme</Bib>, a scheme that produces shorter proofs than the traditional <Bib item="laurie2021rfc">certificate transparency logs</Bib>.
         </P>
@@ -236,9 +181,21 @@ const exp = (
       <P>
         <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo?tab=readme-ov-file#bamboo-">Bamboo</A> format. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
       </P>
-    </Hsection>
+      </>
+    }
+    authors={[
+      {
+        name: "Aljoscha Meyer",
+        email: <A href="https://github.com/AljoschaMeyer/reed">https://github.com/AljoschaMeyer/reed</A>,
+      },
+    ]}
+  >
 
-    <Hsection n="overview" title="Overview">
+    <Hsection n="overview" title="Overview" noNumbering>
+      <P>
+        How about a dense one-paragraph summary, followed by a step-by-step explanation with pictures?
+      </P>
+
       <P>
         <Rb n="name"/> is a <Bib item="meyer2023sok">transitive prefix authentication scheme</Bib>: given a sequence of events, we build a directed acyclic graph (DAG) whose edges correspond to one object containing a secure hash of the other object (i.e., a Merkle-DAG). For each event, we assign a <Dfn>commitment vertex</Dfn> which has a path to the event, as well as paths to the commitment vertices of all earlier events. Given the commitment vertices of two events and the out-neighborhood of the path between them, we can reconstruct the hashes of all path vertices, thus proving that the first event did indeed happen before the other. <Rb n="name"/> guarantees that the out-neighborhoods of these paths are small, i.e., verification is efficient.
       </P>
@@ -272,10 +229,10 @@ const exp = (
       </P>
     </Hsection>
 
-    <Hsection n="spec" title="Specification">
+    <Hsection n="spec" title="Specification" noNumbering>
       <PreviewScope>
         <P>
-          We assume <DefFunction n="hash"/> to be a secure hash function that maps arbitrary bytestrings to fixed-with bytestrings. We call an output of <R n="hash"/> a <Def n="digest"/>.
+          We assume <DefFunction n="hash"/> to be a secure hash function that maps arbitrary bytestrings to fixed-with bytestrings. We call an output of <R n="hash"/> a <Def n="digest" rs="digests"/>.
         </P>
       </PreviewScope>
 
@@ -287,13 +244,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          The set <DefType n="InnerVertices"/> is the set of all pairs <M>(<DefValue n="x"/>, <DefValue n="y"/>)</M> such that <NoWrap><M>1 \leq <R n="x"/> \leq <R n="length"/></M></NoWrap> and <M>3^<Curly><R n="y"/></Curly></M> divides <R n="x"/>.
-        </P>
-      </PreviewScope>
-
-      <PreviewScope>
-        <P>
-          Let <M>(<DefValue n="x2" r="x"/>, <DefValue n="y2" r="y"/>)</M> be in <R n="InnerVertices"/> such that <M>(<R n="x2"/>, <R n="y2"/> + 1)</M> is <Em>not</Em> in <R n="InnerVertices"/>. Then we call <M>(<R n="x2"/>, <R n="y2"/>)</M> the <Def n="commitment" r="commitment vertex"/> of <R n="event"/> <R n="x2"/>.
+          The set <DefType n="InnerVertices"/> is the set of all pairs <M>(<DefValue n="x"/>, <DefValue n="y"/>)</M> such that <NoWrap><M>1 \leq <R n="x"/> \leq <R n="length"/></M></NoWrap> and <M>3^<Curly><R n="y"/></Curly></M> divides <R n="x"/>. We call <M>(<R n="x"/>, 0)</M> the <Def n="commitment" r="commitment vertex" rs="commitment vertices"/> of <R n="event"/> <R n="x"/>.
         </P>
       </PreviewScope>
 
@@ -305,7 +256,13 @@ const exp = (
 
       <PreviewScope>
         <P>
-          Let <M>(<DefValue n="x4" r="x"/>, <DefValue n="y4" r="y"/>)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="x4"/> \geq 2</M> The <Def n="jump" r="jump vertex" rs="jump vertices"/> of <M>(<R n="x4"/>, <R n="y4"/>)</M> is the <R n="commitment"/> of <R n="event"/> <M post="."><R n="x4"/> - 3^<Curly><R n="y4"/></Curly></M>
+          Let <M>(<DefValue n="x2" r="x"/>, <DefValue n="y2" r="y"/>)</M> be in <R n="InnerVertices"/> such that <M>(<R n="x2"/>, <R n="y2"/> + 1)</M> is <Em>not</Em> in <R n="InnerVertices"/>. Then we call <M>(<R n="x2"/>, <R n="y2"/>)</M> the <Def n="topmost" r="topmost vertex"/> of <R n="event"/> <R n="x2"/>.
+        </P>
+      </PreviewScope>
+
+      <PreviewScope>
+        <P>
+          Let <M>(<DefValue n="x4" r="x"/>, <DefValue n="y4" r="y"/>)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="x4"/> \geq 2</M> The <Def n="jump" r="jump vertex" rs="jump vertices"/> of <M>(<R n="x4"/>, <R n="y4"/>)</M> is the <R n="topmost"/> of <R n="event"/> <M post="."><R n="x4"/> - 3^<Curly><R n="y4"/></Curly></M>
         </P>
       </PreviewScope>
 
@@ -320,10 +277,54 @@ const exp = (
           The <DefFunction n="label" fake/> of an inner vertex <M><DefValue n="label_v" r="v"/> := (<DefValue n="x5" r="x"/>, <DefValue n="y5" r="y"/>)</M> is the <R n="hash"/> of the concatenation of<Ul>
             <Li>the byte <Code>0x01</Code>,</Li>
             <Li>the <R n="label"/> of the <R n="predecessor"/> of <R n="label_v"/>,</Li>
-            <Li>the <R n="label"/> of the <R n="jump"/> of <R n="label_v"/>,</Li>
-            <Li>the big-endian encoding of <R n="x5"/> as an unsigned 64-bit integer, and</Li>
+            <Li>the <R n="label"/> of the <R n="jump"/> of <R n="label_v"/> — or the <R n="hash"/> of the empty string, if <M post=","><R n="label_v"/> = (1, 0)</M></Li>
+            <Li>the big-endian encoding of <R n="x5"/><Marginale>
+                Incorporating <R n="x5"/> and <R n="y5"/> in the labels is not needed for the security of the scheme, but it comes with a practical benefit: given any label of some inner vertex, you can prove its position in the graph by supplying the labels of its <R n="predecessor"/> and <R n="jump"/>.
+              </Marginale> as an unsigned 64-bit integer, and</Li>
             <Li>the encoding of <R n="y5"/> as an unsigned 8-bit integer.</Li>
           </Ul>
+        </P>
+      </PreviewScope>
+
+      <PreviewScope>
+        <P>
+          You can find the shortest path from one vertex to another with a greedy step-by-step algorithm. Starting at some vertex, go to its <R n="jump"/>. If that overshoots, go to its <R n="predecessor"/> instead. Iterate until you reached the target vertex. Formally:
+        </P>
+
+        <P>
+          Let <M>(<DefValue n="path_x1" r="x_1"/>, 0)</M> and <M>(<DefValue n="path_x2" r="x_2"/>, 0)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="path_x1"/> \lt <R n="path_x2"/></M> The <Def n="shortest" r="shortest path"/> from <M>(<R n="path_x2"/>, 0)</M> to <M>(<R n="path_x1"/>, 0)</M> is the unique sequence <M>(v_0, \ldots, v_k)</M> such that<Ul>
+            <Li><M post=",">v_0 = (<R n="path_x2"/>, 0)</M></Li>
+            <Li><M post=",">v_k = (<R n="path_x1"/>, 0)</M> and</Li>
+            <Li>
+              for each <M post=",">0 \leq i \lt k</M> we have that<Ul>
+                <Li>if the x-coordinate of the <R n="jump"/> of <M post="">v_i</M> is strictly less than <R n="path_x1"/>, then <M>v_<Curly>i + 1</Curly></M> is the <R n="predecessor"/> of <M post=",">v_i</M> else</Li>
+                <Li><M>v_<Curly>i + 1</Curly></M> is the <R n="jump"/> of <M post=".">v_i</M></Li>
+              </Ul>
+            </Li>
+          </Ul>
+        </P>
+      </PreviewScope>
+
+      <PreviewScope>
+        <P>
+          The closed out-neighborhood of a shortest <R n="shortest"/> between two <Rs n="commitment"/> serves as a certificate that one event happened before the other. Formally:
+        </P>
+
+        <P>
+          Let <M>(<DefValue n="cert_x1" r="x_1"/>, 0)</M> and <M>(<DefValue n="cert_x2" r="x_2"/>, 0)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="cert_x1"/> \lt <R n="cert_x2"/></M> The <Def n="certificate" r="prefix certificate"/> of <M>(<R n="cert_x1"/>, 0)</M> and <M>(<R n="cert_x2"/>, 0)</M> is the sequence that<Ul>
+            <Li>
+              starts with the <R n="label"/> of the <R n="jump"/> of (<R n="cert_x1"/>, 0) — or the <R n="hash"/> of the empty string, if <M post=","><R n="cert_x1"/> = 1</M> and which then
+            </Li>
+            <Li>
+              continues with the <R n="label">labels</R> of the <Rs n="predecessor"/> of the elements of the <R n="shortest"/> from <M>(<R n="cert_x2"/>, 0)</M> to <M post="">(<R n="cert_x1"/>, 0)</M> in reverse order.
+            </Li>
+          </Ul>
+        </P>
+      </PreviewScope>
+
+      <PreviewScope>
+        <P>
+          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> path — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x1"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. And this is how someone else can efficiently prove to you that some event happened before another.
         </P>
       </PreviewScope>
     </Hsection>

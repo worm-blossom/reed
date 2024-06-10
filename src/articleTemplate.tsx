@@ -162,7 +162,6 @@ export function ArticleTemplate(
 
                   <Div id="wrapContent">
                     <Hsection title={title} n={titleId}>
-                      <TableOfContents stopLevel={99} />
                       <Div>
                         <RenderAuthors authors={authors ?? []} />
                       </Div>
