@@ -473,17 +473,22 @@ const exp = (
 
       <PreviewScope>
         <P>
-          The closed out-neighborhood of a <R n="shortest"/> between two <Rs n="commitment"/> serves as a certificate that one event happened before the other. Formally:
+          The labels of the closed out-neighborhood of the <R n="shortest"/> between two <Rs n="commitment"/> serve as a certificate that one event happened before the other. Slightly more precisely: the certificate is obtained by following the shortest path from the greater event to the lesser, adding the <Sidenote note={<>For the final vertex, both out-neighbors are outside the path — add the <R n="predecessor"/> first and the <R n="jump"/> second.</>}>one</Sidenote> out-neighbor at each step that is not itself part of the path, and reversing the obtained sequence at the end. Formally:
         </P>
 
         <P>
-          <Alj>TODO FIXME misses some more jump vertices</Alj>
           Let <M>(<DefValue n="cert_x1" r="x_1"/>, 0)</M> and <M>(<DefValue n="cert_x2" r="x_2"/>, 0)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="cert_x1"/> \lt <R n="cert_x2"/></M> The <Def n="certificate" r="prefix certificate"/> of <M>(<R n="cert_x1"/>, 0)</M> and <M>(<R n="cert_x2"/>, 0)</M> is the sequence that<Ul>
             <Li>
-              starts with the <R n="label"/> of the <R n="jump"/> of (<R n="cert_x1"/>, 0) — or the <R n="hash"/> of the empty string, if <M post=","><R n="cert_x1"/> = 1</M> and which then
+              starts with the <R n="label"/> of the <R n="jump"/> of <M>(<R n="cert_x1"/>, 0)</M> — or the <R n="hash"/> of the empty string, if <M post=","><R n="cert_x1"/> = 1</M> and which then
             </Li>
-            <Li>
+            {/* <Li>
+              followed by the <R n="label"/> of the <R n="predecessor"/> of <M post=",">(<R n="cert_x1"/>, 0)</M> and which then
+            </Li> */}
+            {/* <Li>
               continues with the <R n="label">labels</R> of the <Rs n="predecessor"/> of the elements of the <R n="shortest"/> from <M>(<R n="cert_x2"/>, 0)</M> to <M post="">(<R n="cert_x1"/>, 0)</M> in reverse order.
+            </Li> */}
+            <Li>
+              continues with exactly one <R n="digest"/> for each of the elements of the <R n="shortest"/> from <M>(<R n="cert_x2"/>, 0)</M> to <M>(<R n="cert_x1"/>, 0)</M> in reverse order: either the <R n="digest"/> of the <R n="jump"/> or the <R n="digest"/> of the <R n="predecessor"/>, whichever vertex is <Em>not</Em> the preceding vertex in the reversed <R n="shortest"/> (for the first vertex, always use the <R n="digest"/> of the <R n="predecessor"/>).
             </Li>
           </Ul>
         </P>
