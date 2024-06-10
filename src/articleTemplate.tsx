@@ -94,7 +94,7 @@ export function ArticleTemplate(
           }}
         />,
         <ConfigPreviews
-          previewPath={["build", "previews"]}
+          previewPath={["build", "reed", "previews"]}
           cssDeps={[{ dep: ["index.css"] }]}
           jsDeps={[prettyPreviewsInfo]}
         />,
