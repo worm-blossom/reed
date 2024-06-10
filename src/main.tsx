@@ -180,7 +180,7 @@ const exp = (
         </PreviewScope>
 
         <P>
-          <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo?tab=readme-ov-file#bamboo-">Bamboo</A> specification. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
+          <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo">Bamboo</A> specification. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
         </P>
 
         <P>
