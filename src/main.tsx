@@ -23,6 +23,7 @@ Access,
   Enum,
   FunctionItemUntyped,
   Gt,
+  I,
   If,
   Img,
   Interface,
@@ -233,7 +234,7 @@ const exp = (
         n="fig_vertices"
         caption={<>
           <P>
-            Add some further vertices, according to rules we examine later.
+            We added some further vertices, according to rules we examine later.
           </P>
         </>}
       >
@@ -250,7 +251,7 @@ const exp = (
         n="fig_edges"
         caption={<>
           <P>
-            Add some edges. These follow a useful pattern, I promise. Can you smell the ternary almost-skip-list already?
+            We add some edges. These follow a useful pattern, I promise. Can you smell the ternary almost-skip-list already?
           </P>
         </>}
       >
@@ -294,47 +295,70 @@ const exp = (
       </Fig>
 
       <P>
-        Given the (labels of the) out-neighborhood of that path, we can reconstruct the labels of the commitment vertices.
+        Given the (labels of the) out-neighborhood of that path, we can reconstruct the labels of the path vertices. In particular, we can reconstruct the labels of the commitment vertices of events <M>8</M> and <M>2</M>.
       </P>
 
-      <Pseudocode n="introduction_verification_example" lineNumbering>
-          <Loc>
-            <LetRaw lhs="label_of_commitment_of_2"><ApplicationRaw fun="hash" args={[
-              <ApplicationRaw fun="concat" multilineArgs args={[
+      <Pseudocode n="introduction_verification_example">
+        <Loc>
+          <LetRaw lhs="label_2_0">
+            <ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" args={[
                 <ApplicationRaw fun="label" args={[<M>(1, 0)</M>]}/>,
                 <ApplicationRaw fun="label" args={[<M>2</M>]}/>,
               ]}/>
-            ]} /></LetRaw>
-          </Loc>
-          <Loc/>
-          <Loc>
-            <LetRaw lhs="label_of_commitment_of_8"><ApplicationRaw fun="hash" args={[
-              <ApplicationRaw fun="concat" multilineArgs args={[
-                <ApplicationRaw fun="hash" args={[
-                  <ApplicationRaw fun="concat" multilineArgs args={[
-                    <ApplicationRaw fun="hash" args={[
-                      <ApplicationRaw fun="concat" multilineArgs args={[
-                        <ApplicationRaw fun="hash" args={[
-                          <ApplicationRaw fun="concat" multilineArgs args={[
-                            <ApplicationRaw fun="label" args={[<M>(1, 0)</M>]}/>,
-                            <ApplicationRaw fun="hash" args={[
-                              <ApplicationRaw fun="concat" multilineArgs args={[
-                                <ApplicationRaw fun="label" args={["label_of_commitment_of_2"]}/>,
-                                <ApplicationRaw fun="label" args={[<M>3</M>]}/>,
-                              ]}/>
-                            ]} />,
-                          ]}/>
-                        ]} />,
-                        <ApplicationRaw fun="label" args={[<M>(6, 0)</M>]}/>,
-                      ]}/>
-                    ]} />,
-                    <ApplicationRaw fun="label" args={[<M>7</M>]}/>,
-                  ]}/>
-                ]} />,
+            ]} />
+          </LetRaw>
+        </Loc>
+        <Loc>
+          <LetRaw lhs="label_3_0">
+            <ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" args={[
+                "label_2_0",
+                <ApplicationRaw fun="label" args={[<M>3</M>]}/>,
+              ]}/>
+            ]} />
+          </LetRaw>
+        </Loc>
+        <Loc>
+          <LetRaw lhs="label_3_1">
+            <ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" args={[
+                <ApplicationRaw fun="label" args={[<M>(1, 0)</M>]}/>,
+                "label_3_0",
+              ]}/>
+            ]} />
+          </LetRaw>
+        </Loc>
+        <Loc>
+          <LetRaw lhs="label_6_1">
+            <ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" args={[
+                "label_3_1",
+                <ApplicationRaw fun="label" args={[<M>(6, 0)</M>]}/>,
+              ]}/>
+            ]} />
+          </LetRaw>
+        </Loc>
+        <Loc>
+          <LetRaw lhs="label_7_0">
+            <ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" args={[
+                "label_6_1",
+                <ApplicationRaw fun="label" args={[<M>7</M>]}/>,
+              ]}/>
+            ]} />
+          </LetRaw>
+        </Loc>
+        <Loc>
+          <LetRaw lhs="label_8_0">
+            <ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" args={[
+                "label_7_0",
                 <ApplicationRaw fun="label" args={[<M>8</M>]}/>,
               ]}/>
-            ]} /></LetRaw>
-          </Loc>
+            ]} />
+          </LetRaw>
+        </Loc>
       </Pseudocode>
 
       <P>
@@ -351,19 +375,19 @@ const exp = (
 
       <PreviewScope>
         <P>
-          We define everything in terms of a sequence <DefValue n="events"/> of <Rs n="event"/>, where an <Def n="event" rs="events"/> is an arbitrary bytestring. The sequence <R n="events"/> must have a <DefValue n="length"/> between one and <M post=",">2^<Curly>64</Curly> - 1</M> both inclusive. We number <Rs n="event"/> starting at <M post=",">1</M> because the math ends up much nicer that way.
+          We<Marginale>Compare <Rc n="fig_events"/>.</Marginale> define everything in terms of a sequence <DefValue n="events"/> of <Rs n="event"/>, where an <Def n="event" rs="events"/> is an arbitrary bytestring. The sequence <R n="events"/> must have a <DefValue n="length"/> between one and <M post=",">2^<Curly>64</Curly> - 1</M> both inclusive. We number <Rs n="event"/> starting at <M post=",">1</M> because the math ends up much nicer that way.
         </P>
       </PreviewScope>
 
       <PreviewScope>
         <P>
-          The set <DefType n="InnerVertices"/> is the set of all pairs <M>(<DefValue n="x"/>, <DefValue n="y"/>)</M> such that <NoWrap><M>1 \leq <R n="x"/> \leq <R n="length"/></M></NoWrap> and <M>3^<Curly><R n="y"/></Curly></M> divides <R n="x"/>. We call <M>(<R n="x"/>, 0)</M> the <Def n="commitment" r="commitment vertex" rs="commitment vertices"/> of <R n="event"/> <R n="x"/>.
+          The<Marginale>Compare <Rc n="fig_vertices"/>.</Marginale> set <DefType n="InnerVertices"/> is the set of all pairs <M>(<DefValue n="x"/>, <DefValue n="y"/>)</M> such that <NoWrap><M>1 \leq <R n="x"/> \leq <R n="length"/></M></NoWrap> and <M>3^<Curly><R n="y"/></Curly></M> divides <R n="x"/>. We call <M>(<R n="x"/>, 0)</M> the <Def n="commitment" r="commitment vertex" rs="commitment vertices"/><Marginale>Compare <Rc n="fig_commitments"/>.</Marginale> of <R n="event"/> <R n="x"/>.
         </P>
       </PreviewScope>
 
       <PreviewScope>
         <P>
-          Let <M>(<DefValue n="x3" r="x"/>, <DefValue n="y3" r="y"/>)</M> be in <R n="InnerVertices"/>. The <Def n="predecessor" r="predecessor vertex" rs="predecessor vertices"/> of <M>(<R n="x3"/>, <R n="y3"/>)</M> is the <R n="event"/> <R n="x3"/> if <M><R n="y3"/> = 0</M>, or the inner vertex <M>(<R n="x3"/>, <R n="y3"/> - 1)</M>, otherwise.
+          Let <M>(<DefValue n="x3" r="x"/>, <DefValue n="y3" r="y"/>)</M> be in <R n="InnerVertices"/>. The <Def n="predecessor" r="predecessor vertex" rs="predecessor vertices"/><Marginale>Compare <Rc n="fig_edges"/> (light edges).</Marginale> of <M>(<R n="x3"/>, <R n="y3"/>)</M> is the <R n="event"/> <R n="x3"/> if <M><R n="y3"/> = 0</M>, or the inner vertex <M>(<R n="x3"/>, <R n="y3"/> - 1)</M>, otherwise.
         </P>
       </PreviewScope>
 
@@ -375,14 +399,14 @@ const exp = (
 
       <PreviewScope>
         <P>
-          Let <M>(<DefValue n="x4" r="x"/>, <DefValue n="y4" r="y"/>)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="x4"/> \geq 2</M> The <Def n="jump" r="jump vertex" rs="jump vertices"/> of <M>(<R n="x4"/>, <R n="y4"/>)</M> is the <R n="topmost"/> of <R n="event"/> <M post="."><R n="x4"/> - 3^<Curly><R n="y4"/></Curly></M>
+          Let <M>(<DefValue n="x4" r="x"/>, <DefValue n="y4" r="y"/>)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="x4"/> \geq 2</M> The <Def n="jump" r="jump vertex" rs="jump vertices"/><Marginale>Compare <Rc n="fig_edges"/> (dark edges).</Marginale> of <M>(<R n="x4"/>, <R n="y4"/>)</M> is the <R n="topmost"/> of <R n="event"/> <M post="."><R n="x4"/> - 3^<Curly><R n="y4"/></Curly></M>
         </P>
       </PreviewScope>
 
       <Fig
         n="fig_slls"
         caption={<>
-          <P>
+          <P style="text-align: center;">
             A graph depicting the first few vertices for a long sequence of <R n="events">events</R>. The light, vertical edges connect each vertex to its <R n="predecessor"/>, the darker edges connect each vertex to its <R n="jump"/>.
           </P>
         </>}
@@ -432,9 +456,24 @@ const exp = (
         </P>
       </PreviewScope>
 
+      <Fig
+        n="fig_large_path"
+        title="An Example Path"
+        caption={<>
+          <P style="text-align: center;">
+            The <R n="shortest"/> from <M>(20, 0)</M> to <M>(6, 0)</M> is the sequence <M post=".">((20, 0), (19, 0), (18, 2), (9, 2), (9, 1), (6, 1), (6, 0))</M>
+          </P>
+        </>}
+        wrapperTagProps={{clazz: "veryWide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "large_path.svg"]} />}
+        />
+      </Fig>
+
       <PreviewScope>
         <P>
-          The closed out-neighborhood of a shortest <R n="shortest"/> between two <Rs n="commitment"/> serves as a certificate that one event happened before the other. Formally:
+          The closed out-neighborhood of a <R n="shortest"/> between two <Rs n="commitment"/> serves as a certificate that one event happened before the other. Formally:
         </P>
 
         <P>
@@ -450,11 +489,23 @@ const exp = (
         </P>
       </PreviewScope>
 
+      <P>
+        Continuing<Marginale>Note how the same <R n="digest"/> may appear multiple times in a <R n="certificate"/>. We could easily define a compressed version of prefix certificates that eliminates all but the first occurence of duplicate hashes, but verifying these becomes more difficult. Duplicates are rare enough (they only occur when the <M>y</M> coordinate of a <R n="jump"/> decreases strictly, which only happens toward the <Quotes>top-left of the graph</Quotes>) that we opted for the simpler verification procedure over the slight, best-case certificate size reductions.</Marginale> the example from <Rc n="fig_large_path"/>:<Br/>The <R n="certificate"/> of <M>(6, 0)</M> and <M>(20, 0)</M> is the sequence of the <Rs n="digest"/> of <M post=".">((5, 0), 6, (3, 1), (9, 0), (3, 1), (18, 1), 19, 20)</M>
+      </P>
+
       <PreviewScope>
         <P>
-          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> path — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x2"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. And this is how someone else can efficiently prove to you that some event happened before another.
+          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> path — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x2"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. Assuming abscence of hash collisions, this proves that the sequence of all events up to <R n="event"/> <R n="claim_x1"/> is a prefix of the sequence of all events up to <R n="event"/> <R n="claim_x2"/>. Hence, in particular, <R n="event"/> <R n="claim_x1"/> happened before <R n="event"/> <R n="claim_x2"/>.
         </P>
       </PreviewScope>
+
+      <P>
+        And that is how someone else can efficiently prove to you that some event happened before another. For the use-case of transparency logs, a logging authority would sign <Rs n="commitment"/>. Signed <Rs n="commitment"/> take on the role of <A href="https://www.rfc-editor.org/rfc/rfc9162.html#name-signed-tree-head-sth">signed tree heads</A> in that scenario.
+      </P>
+
+      <P>
+        For proofs of correctness and a detailed complexity analysis of the linking scheme that <R n="name"/> employs, see the <Bib item="meyer2023better">paper</Bib>.
+      </P>
     </Hsection>
   </ArticleTemplate>
 );
