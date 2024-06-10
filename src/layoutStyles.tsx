@@ -183,5 +183,13 @@ body {
   }
 }
 
+#wrapContent {
+    & > :not(section).veryWide, & section > :not(section).veryWide {
+      width: 90vw;
+      max-width: 1500px;
+      margin-left: calc((max(-90vw, -1500px) + 100%) / 2);
+      margin-right: calc((max(-90vw, -1500px) + 100%) / 2);
+    }
+  }
 `;
 }

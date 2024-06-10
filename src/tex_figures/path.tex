@@ -1,0 +1,105 @@
+\documentclass[crop,tikz]{standalone}
+\input{styles.tex}
+
+\begin{document}
+\begin{tikzpicture}[xscale=1.2,yscale=1.4]%[font=\tiny]
+    % \useasboundingbox (-0.5,-1.5) rectangle (27.3,3.5);
+
+	\pgfdeclarelayer{background}
+	\pgfdeclarelayer{foreground}
+	\pgfsetlayers{background,main,foreground}
+
+	\begin{pgfonlayer}{foreground}
+        \node[nodeItem] (n1) at (0, -1) {$1$};
+        \node[nodeItem] (n2) at (1, -1) {$2$};
+        \node[nodeItem] (n3) at (2, -1) {$3$};
+        \node[nodeItem] (n4) at (3, -1) {$4$};
+        \node[nodeItem] (n5) at (4, -1) {$5$};
+        \node[nodeItem] (n6) at (5, -1) {$6$};
+        \node[nodeItem] (n7) at (6, -1) {$7$};
+        \node[nodeItem] (n8) at (7, -1) {$8$};
+        \node[nodeItem] (n9) at (8, -1) {$9$};
+
+        \node (v1_0) at (0, 0) {$(1, 0)$};
+        \node (v2_0) at (1, 0) {$(2, 0)$};
+        \node (v3_0) at (2, 0) {$(3, 0)$};
+        \node (v3_1) at (2, 1) {$(3, 1)$};
+        \node (v4_0) at (3, 0) {$(4, 0)$};
+        \node (v5_0) at (4, 0) {$(5, 0)$};
+        \node (v6_0) at (5, 0) {$(6, 0)$};
+        \node (v6_1) at (5, 1) {$(6, 1)$};
+        \node (v7_0) at (6, 0) {$(7, 0)$};
+        \node (v8_0) at (7, 0) {$(8, 0)$};
+        \node (v9_0) at (8, 0) {$(9, 0)$};
+        \node (v9_1) at (8, 1) {$(9, 1)$};
+        \node (v9_2) at (8, 2) {$(9, 2)$};
+
+        \draw[myedge,edgeParent] (v1_0) -- (n1);
+        \draw[myedge,edgeParent] (v2_0) -- (n2);
+        \draw[myedge,edgeParent] (v3_0) -- (n3);
+        \draw[myedge,edgeParent] (v4_0) -- (n4);
+        \draw[myedge,edgeParent] (v5_0) -- (n5);
+        \draw[myedge,edgeParent] (v6_0) -- (n6);
+        \draw[myedge,edgeParent] (v7_0) -- (n7);
+        \draw[myedge,edgeParent] (v8_0) -- (n8);
+        \draw[myedge,edgeParent] (v9_0) -- (n9);
+
+        \draw[edgePredecessor] (v3_1) -- (v3_0);
+        \draw[edgePredecessor] (v6_1) -- (v6_0);
+        \draw[edgePredecessor] (v9_1) -- (v9_0);
+        \draw[edgePredecessor] (v9_2) -- (v9_1);
+
+        \draw[skipEdge] (v2_0) -- (v1_0);
+        \draw[skipEdge] (v3_0) -- (v2_0);
+        \draw[skipEdge] (v3_1) -- (v1_0);
+        \draw[skipEdge] (v4_0) -- (v3_1);
+        \draw[skipEdge] (v5_0) -- (v4_0);
+        \draw[skipEdge] (v6_0) -- (v5_0);
+        \draw[skipEdge] (v6_1) -- (v3_1);
+        \draw[skipEdge] (v7_0) -- (v6_1);
+        \draw[skipEdge] (v8_0) -- (v7_0);
+        \draw[skipEdge] (v9_0) -- (v8_0);
+        \draw[skipEdge] (v9_1) -- (v6_1);
+        \draw[skipEdge] (v9_2) -- (v3_1);
+        
+	\end{pgfonlayer}
+
+    \begin{pgfonlayer}{main}
+        \begin{scope}[transparency group, opacity=0.2]
+			\draw[cPoolPath2,line width=15pt,rounded corners=0.1em,line cap=round] (v8_0.center) -- (v7_0.center) -- (v6_1.center) -- (v3_1.center) -- (v3_0.center) -- (v2_0.center);
+			\draw[cPoolPath2,line width=15pt,rounded corners=1em,line cap=round] (v8_0.center) -- (v7_0.center) -- (v6_1.center) -- (v3_1.center) -- (v3_0.center) -- (v2_0.center);
+		\end{scope}
+	\end{pgfonlayer}
+
+	\begin{pgfonlayer}{background}
+		\newcommand{\onerecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.08] ($(#1,-1)-(0.35,0.25)$) rectangle ($({#1},0)+(0.35,0.25)$);}
+
+		\foreach \x in {0,...,8}
+		{
+			\onerecs{\x};
+		}
+
+		% \newcommand{\tworecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.03] ($(#1,-1)-(0.4,0.3)$) rectangle ($({#1+2},1)+(0.4,0.3)$);}
+
+		% \foreach \x in {0,...,15}
+		% {
+		% 	\tworecs{3*\x};
+		% }
+
+		% \newcommand{\fourrecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.03] ($(#1,-1)-(0.44,0.4)$) rectangle ($({#1+8},2)+(0.44,0.4)$);}
+
+		% \foreach \x in {0,...,6}
+		% {
+		% 	\fourrecs{9*\x};
+		% }
+
+		% \newcommand{\eightrecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.02] ($(#1,-1)-(0.48,0.45)$) rectangle ($({#1+26},3)+(0.48,0.45)$);}
+
+		% \foreach \x in {0,...,1}
+		% {
+		% 	\eightrecs{27*\x};
+		% }
+	\end{pgfonlayer}
+\end{tikzpicture}
+
+\end{document}

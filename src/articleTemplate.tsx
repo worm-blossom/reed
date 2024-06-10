@@ -13,9 +13,11 @@ import {
   ConfigPseudocode,
   ConfigWip,
   Div,
+  Img,
   JsDependency,
   makeNumberingRenderer,
   PreviewScopePushWrapper,
+  ResolveAsset,
   ScriptDependencyInfo,
   TableOfContents,
 } from "../deps.ts";

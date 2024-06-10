@@ -173,14 +173,18 @@ const exp = (
     abstract={
       <>
         <PreviewScope>
-        <P>
-          <Bib item="meyer2023sok">Prefix authentication schemes</Bib> — aka append-only logs, or transparency logs — are cryptographic schemes to efficiently authenticate total ordering between events. For any two events from a single event stream, you can provide a short digest to certify that one happened before the other (as opposed to them happening concurrently). <Def n="name" r="reed">Reed</Def> is a lightweigh specification for implementing the <Bib item="meyer2023better"><M>SLLS_3</M> scheme</Bib>, a scheme that produces shorter proofs than the traditional <Bib item="laurie2021rfc">certificate transparency logs</Bib>.
-        </P>
-      </PreviewScope>
+          <P>
+            <Bib item="meyer2023sok">Prefix authentication schemes</Bib> — aka append-only logs, or transparency logs — are cryptographic schemes to efficiently authenticate total ordering between events. For any two events from a single event stream, you can provide a short digest to certify that one happened before the other (as opposed to them happening concurrently). <Def n="name" r="reed">Reed</Def> is a lightweigh specification for implementing the <Bib item="meyer2023better"><M>SLLS_3</M> scheme</Bib>, a scheme that produces shorter proofs than the traditional <Bib item="laurie2021rfc">certificate transparency logs</Bib>.
+          </P>
+        </PreviewScope>
 
-      <P>
-        <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo?tab=readme-ov-file#bamboo-">Bamboo</A> format. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
-      </P>
+        <P>
+          <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo?tab=readme-ov-file#bamboo-">Bamboo</A> format. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
+        </P>
+
+        <P>
+          There will be graphs.
+        </P>
       </>
     }
     authors={[
@@ -190,8 +194,12 @@ const exp = (
       },
     ]}
   >
+    <Img
+      clazz="veryWide"
+      src={<ResolveAsset asset={["graphics", "splash.svg"]} />}
+    />
 
-    <Hsection n="overview" title="Overview" noNumbering>
+    <Hsection n="introduction" title="Introduction" noNumbering>
       <P>
         How about a dense one-paragraph summary, followed by a step-by-step explanation with pictures?
       </P>
@@ -204,28 +212,133 @@ const exp = (
         Let’s break this down step by step. We start out with an ordered sequence of events, nine in the following example:
       </P>
 
+      <Fig
+        n="fig_events"
+        caption={<>
+          <P>
+            A sequence of nine events. Nothing interesting yet.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "events.svg"]} />}
+        />
+      </Fig>
+
       <P>
-        These events will form the basis of a graph. To make sure that graph will give us efficient prefix authentication, we first need to add some additional vertices. You do not need to care <Em>how</Em> we determine these, we are just getting a feel for the general concepts here.
+        These events will form the basis of a graph. To make sure that graph will give us efficient prefix authentication, we first need to add some additional vertices. You do not yet need to care <Em>how</Em> we determine these, we are just getting a feel for the general concepts here.
       </P>
+
+      <Fig
+        n="fig_vertices"
+        caption={<>
+          <P>
+            Add some further vertices, according to rules we examine later.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "vertices.svg"]} />}
+        />
+      </Fig>
 
       <P>
         Next, we add edges to turn these vertices into a useful graph. We are building a Merkle-DAG, which means that each vertex is labeled with a secure hash of the concatenation of the labels of its <Sidenote note={<>This is a slight oversimplification, <R n="name"/> proper also concatenates some metadata into the labels.</>}>out-neighbors</Sidenote>. We need not draw the labels, since they are derived deterministically from the structure of the graph.
       </P>
 
+      <Fig
+        n="fig_edges"
+        caption={<>
+          <P>
+            Add some edges. These follow a useful pattern, I promise. Can you smell the ternary almost-skip-list already?
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "edges.svg"]} />}
+        />
+      </Fig>
+
       <P>
-        In this graph, each event has a corresponding commitment vertex. As you can see, each event is reachable from its comittment vertex, and each commitment vertex is reachable from the commitment vertices of all later events.
+        Each event has an associated commitment vertex.
       </P>
+
+      <Fig
+        n="fig_commitments"
+        caption={<>
+          <P>
+            Events and their dedicated commitment vertices, grouped together. Not that each event is (trivially) reachable from its commitment vertex, and each commitment vertex is reachable from the commitment vertices of all later events.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "commitments.svg"]} />}
+        />
+      </Fig>
 
       <P>
         To illustrate prefix authentication, we now arbitrarily select two events and highlight the path between their commitment vertices.
       </P>
 
-      <P>
-        Given the (labels of the) out-neighborhood of that path, we can reconstruct the label of the greater commitment vertex.
-      </P>
+      <Fig
+        n="fig_path"
+        caption={<>
+          <P>
+            The shortest path between the commitment vertices of events <M>8</M> and <M>2</M>.
+          </P>
+        </>}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "path.svg"]} />}
+        />
+      </Fig>
 
       <P>
-        If the hash function we used is secure, then it is computationally infeasable to provide labels that allow reconstructing the path between two vertices — unless there actually <Em>is</Em> a path from which we can simply look up the labels. Hence, the labels of the out-neighborhood of the path serve as an unforgeable proof that event <M>2</M> happened before event <M>8</M>. Neat!
+        Given the (labels of the) out-neighborhood of that path, we can reconstruct the labels of the commitment vertices.
+      </P>
+
+      <Pseudocode n="introduction_verification_example" lineNumbering>
+          <Loc>
+            <LetRaw lhs="label_of_commitment_of_2"><ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" multilineArgs args={[
+                <ApplicationRaw fun="label" args={[<M>(1, 0)</M>]}/>,
+                <ApplicationRaw fun="label" args={[<M>2</M>]}/>,
+              ]}/>
+            ]} /></LetRaw>
+          </Loc>
+          <Loc/>
+          <Loc>
+            <LetRaw lhs="label_of_commitment_of_8"><ApplicationRaw fun="hash" args={[
+              <ApplicationRaw fun="concat" multilineArgs args={[
+                <ApplicationRaw fun="hash" args={[
+                  <ApplicationRaw fun="concat" multilineArgs args={[
+                    <ApplicationRaw fun="hash" args={[
+                      <ApplicationRaw fun="concat" multilineArgs args={[
+                        <ApplicationRaw fun="hash" args={[
+                          <ApplicationRaw fun="concat" multilineArgs args={[
+                            <ApplicationRaw fun="label" args={[<M>(1, 0)</M>]}/>,
+                            <ApplicationRaw fun="hash" args={[
+                              <ApplicationRaw fun="concat" multilineArgs args={[
+                                <ApplicationRaw fun="label" args={["label_of_commitment_of_2"]}/>,
+                                <ApplicationRaw fun="label" args={[<M>3</M>]}/>,
+                              ]}/>
+                            ]} />,
+                          ]}/>
+                        ]} />,
+                        <ApplicationRaw fun="label" args={[<M>(6, 0)</M>]}/>,
+                      ]}/>
+                    ]} />,
+                    <ApplicationRaw fun="label" args={[<M>7</M>]}/>,
+                  ]}/>
+                ]} />,
+                <ApplicationRaw fun="label" args={[<M>8</M>]}/>,
+              ]}/>
+            ]} /></LetRaw>
+          </Loc>
+      </Pseudocode>
+
+      <P>
+        If the hash function is secure, then it is computationally infeasible to <Em>fabricate</Em> labels that allow reconstructing a path between two vertices. Hence, the labels of the out-neighborhood of the path serve as an unforgeable proof that event <M>2</M> happened before event <M>8</M>. Neat!
       </P>
     </Hsection>
 
@@ -265,6 +378,20 @@ const exp = (
           Let <M>(<DefValue n="x4" r="x"/>, <DefValue n="y4" r="y"/>)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="x4"/> \geq 2</M> The <Def n="jump" r="jump vertex" rs="jump vertices"/> of <M>(<R n="x4"/>, <R n="y4"/>)</M> is the <R n="topmost"/> of <R n="event"/> <M post="."><R n="x4"/> - 3^<Curly><R n="y4"/></Curly></M>
         </P>
       </PreviewScope>
+
+      <Fig
+        n="fig_slls"
+        caption={<>
+          <P>
+            A graph depicting the first few vertices for a long sequence of <R n="events">events</R>. The light, vertical edges connect each vertex to its <R n="predecessor"/>, the darker edges connect each vertex to its <R n="jump"/>.
+          </P>
+        </>}
+        wrapperTagProps={{clazz: "veryWide"}}
+      >
+        <Img
+          src={<ResolveAsset asset={["graphics", "slls3.svg"]} />}
+        />
+      </Fig>
 
       <PreviewScope>
         <P>
@@ -311,6 +438,7 @@ const exp = (
         </P>
 
         <P>
+          <Alj>TODO FIXME misses some more jump vertices</Alj>
           Let <M>(<DefValue n="cert_x1" r="x_1"/>, 0)</M> and <M>(<DefValue n="cert_x2" r="x_2"/>, 0)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="cert_x1"/> \lt <R n="cert_x2"/></M> The <Def n="certificate" r="prefix certificate"/> of <M>(<R n="cert_x1"/>, 0)</M> and <M>(<R n="cert_x2"/>, 0)</M> is the sequence that<Ul>
             <Li>
               starts with the <R n="label"/> of the <R n="jump"/> of (<R n="cert_x1"/>, 0) — or the <R n="hash"/> of the empty string, if <M post=","><R n="cert_x1"/> = 1</M> and which then
@@ -324,7 +452,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> path — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x1"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. And this is how someone else can efficiently prove to you that some event happened before another.
+          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> path — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x2"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. And this is how someone else can efficiently prove to you that some event happened before another.
         </P>
       </PreviewScope>
     </Hsection>

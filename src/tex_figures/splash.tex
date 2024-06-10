@@ -1,0 +1,222 @@
+\documentclass[crop,tikz]{standalone}
+\input{styles.tex}
+
+\begin{document}
+\begin{tikzpicture}[font=\tiny]
+    \useasboundingbox (-0.5,-1.5) rectangle (27.3,3.5);
+
+	\pgfdeclarelayer{background}
+	\pgfdeclarelayer{foreground}
+	\pgfsetlayers{background,main,foreground}
+
+	\begin{pgfonlayer}{foreground}
+        \node[nodeItem] (n1) at (0, -1) {$1$};
+        \node[nodeItem] (n2) at (1, -1) {$2$};
+        \node[nodeItem] (n3) at (2, -1) {$3$};
+        \node[nodeItem] (n4) at (3, -1) {$4$};
+        \node[nodeItem] (n5) at (4, -1) {$5$};
+        \node[nodeItem] (n6) at (5, -1) {$6$};
+        \node[nodeItem] (n7) at (6, -1) {$7$};
+        \node[nodeItem] (n8) at (7, -1) {$8$};
+        \node[nodeItem] (n9) at (8, -1) {$9$};
+        \node[nodeItem] (n10) at (9, -1) {$10$};
+        \node[nodeItem] (n11) at (10, -1) {$11$};
+        \node[nodeItem] (n12) at (11, -1) {$12$};
+        \node[nodeItem] (n13) at (12, -1) {$13$};
+        \node[nodeItem] (n14) at (13, -1) {$14$};
+        \node[nodeItem] (n15) at (14, -1) {$15$};
+        \node[nodeItem] (n16) at (15, -1) {$16$};
+        \node[nodeItem] (n17) at (16, -1) {$17$};
+        \node[nodeItem] (n18) at (17, -1) {$18$};
+        \node[nodeItem] (n19) at (18, -1) {$19$};
+        \node[nodeItem] (n20) at (19, -1) {$20$};
+        \node[nodeItem] (n21) at (20, -1) {$21$};
+        \node[nodeItem] (n22) at (21, -1) {$22$};
+        \node[nodeItem] (n23) at (22, -1) {$23$};
+        \node[nodeItem] (n24) at (23, -1) {$24$};
+        \node[nodeItem] (n25) at (24, -1) {$25$};
+        \node[nodeItem] (n26) at (25, -1) {$26$};
+        \node[nodeItem] (n27) at (26, -1) {$27$};
+        \node[nodeItem] (n28) at (27, -1) {$28$};
+        \node[nodeItem] (n29) at (28, -1) {$29$};
+
+        \node (v1_0) at (0, 0) {$(1, 0)$};
+        \node (v2_0) at (1, 0) {$(2, 0)$};
+        \node (v3_0) at (2, 0) {$(3, 0)$};
+        \node (v3_1) at (2, 1) {$(3, 1)$};
+        \node (v4_0) at (3, 0) {$(4, 0)$};
+        \node (v5_0) at (4, 0) {$(5, 0)$};
+        \node (v6_0) at (5, 0) {$(6, 0)$};
+        \node (v6_1) at (5, 1) {$(6, 1)$};
+        \node (v7_0) at (6, 0) {$(7, 0)$};
+        \node (v8_0) at (7, 0) {$(8, 0)$};
+        \node (v9_0) at (8, 0) {$(9, 0)$};
+        \node (v9_1) at (8, 1) {$(9, 1)$};
+        \node (v9_2) at (8, 2) {$(9, 2)$};
+        \node (v10_0) at (9, 0) {$(10, 0)$};
+        \node (v11_0) at (10, 0) {$(11, 0)$};
+        \node (v12_0) at (11, 0) {$(12, 0)$};
+        \node (v12_1) at (11, 1) {$(12, 1)$};
+        \node (v13_0) at (12, 0) {$(13, 0)$};
+        \node (v14_0) at (13, 0) {$(14, 0)$};
+        \node (v15_0) at (14, 0) {$(15, 0)$};
+        \node (v15_1) at (14, 1) {$(15, 1)$};
+        \node (v16_0) at (15, 0) {$(16, 0)$};
+        \node (v17_0) at (16, 0) {$(17, 0)$};
+        \node (v18_0) at (17, 0) {$(18, 0)$};
+        \node (v18_1) at (17, 1) {$(18, 1)$};
+        \node (v18_2) at (17, 2) {$(18, 2)$};
+        \node (v19_0) at (18, 0) {$(19, 0)$};
+        \node (v20_0) at (19, 0) {$(20, 0)$};
+        \node (v21_0) at (20, 0) {$(21, 0)$};
+        \node (v21_1) at (20, 1) {$(21, 1)$};
+        \node (v22_0) at (21, 0) {$(22, 0)$};
+        \node (v23_0) at (22, 0) {$(23, 0)$};
+        \node (v24_0) at (23, 0) {$(24, 0)$};
+        \node (v24_1) at (23, 1) {$(24, 1)$};
+        \node (v25_0) at (24, 0) {$(25, 0)$};
+        \node (v26_0) at (25, 0) {$(26, 0)$};
+        \node (v27_0) at (26, 0) {$(27, 0)$};
+        \node (v27_1) at (26, 1) {$(27, 1)$};
+        \node (v27_2) at (26, 2) {$(27, 2)$};
+        \node (v27_3) at (26, 3) {$(27, 3)$};
+        \node (v28_0) at (27, 0) {$(28, 0)$};
+        \node (v29_0) at (28, 0) {$(29, 0)$};
+
+        \node (v30_1) at (29, 1) {$(30, 1)$};
+        \node (v36_2) at (35, 2) {$(36, 2)$};
+        \node (v54_3) at (53, 3) {$(54, 3)$};
+        \node (v81_4) at (80, 4) {$(81, 4)$};
+
+        \draw[myedge,edgeParent] (v1_0) -- (n1);
+        \draw[myedge,edgeParent] (v2_0) -- (n2);
+        \draw[myedge,edgeParent] (v3_0) -- (n3);
+        \draw[myedge,edgeParent] (v4_0) -- (n4);
+        \draw[myedge,edgeParent] (v5_0) -- (n5);
+        \draw[myedge,edgeParent] (v6_0) -- (n6);
+        \draw[myedge,edgeParent] (v7_0) -- (n7);
+        \draw[myedge,edgeParent] (v8_0) -- (n8);
+        \draw[myedge,edgeParent] (v9_0) -- (n9);
+        \draw[myedge,edgeParent] (v10_0) -- (n10);
+        \draw[myedge,edgeParent] (v11_0) -- (n11);
+        \draw[myedge,edgeParent] (v12_0) -- (n12);
+        \draw[myedge,edgeParent] (v13_0) -- (n13);
+        \draw[myedge,edgeParent] (v14_0) -- (n14);
+        \draw[myedge,edgeParent] (v15_0) -- (n15);
+        \draw[myedge,edgeParent] (v16_0) -- (n16);
+        \draw[myedge,edgeParent] (v17_0) -- (n17);
+        \draw[myedge,edgeParent] (v18_0) -- (n18);
+        \draw[myedge,edgeParent] (v19_0) -- (n19);
+        \draw[myedge,edgeParent] (v20_0) -- (n20);
+        \draw[myedge,edgeParent] (v21_0) -- (n21);
+        \draw[myedge,edgeParent] (v22_0) -- (n22);
+        \draw[myedge,edgeParent] (v23_0) -- (n23);
+        \draw[myedge,edgeParent] (v24_0) -- (n24);
+        \draw[myedge,edgeParent] (v25_0) -- (n25);
+        \draw[myedge,edgeParent] (v26_0) -- (n26);
+        \draw[myedge,edgeParent] (v27_0) -- (n27);
+        \draw[myedge,edgeParent] (v28_0) -- (n28);
+        \draw[myedge,edgeParent] (v29_0) -- (n29);
+
+        \draw[edgePredecessor] (v3_1) -- (v3_0);
+        \draw[edgePredecessor] (v6_1) -- (v6_0);
+        \draw[edgePredecessor] (v9_1) -- (v9_0);
+        \draw[edgePredecessor] (v9_2) -- (v9_1);
+        \draw[edgePredecessor] (v12_1) -- (v12_0);
+        \draw[edgePredecessor] (v15_1) -- (v15_0);
+        \draw[edgePredecessor] (v18_1) -- (v18_0);
+        \draw[edgePredecessor] (v18_2) -- (v18_1);
+        \draw[edgePredecessor] (v21_1) -- (v21_0);
+        \draw[edgePredecessor] (v24_1) -- (v24_0);
+        \draw[edgePredecessor] (v27_1) -- (v27_0);
+        \draw[edgePredecessor] (v27_2) -- (v27_1);
+        \draw[edgePredecessor] (v27_3) -- (v27_2);
+
+        \draw[skipEdge] (v2_0) -- (v1_0);
+        \draw[skipEdge] (v3_0) -- (v2_0);
+        \draw[skipEdge] (v3_1) -- (v1_0);
+        \draw[skipEdge] (v4_0) -- (v3_1);
+        \draw[skipEdge] (v5_0) -- (v4_0);
+        \draw[skipEdge] (v6_0) -- (v5_0);
+        \draw[skipEdge] (v6_1) -- (v3_1);
+        \draw[skipEdge] (v7_0) -- (v6_1);
+        \draw[skipEdge] (v8_0) -- (v7_0);
+        \draw[skipEdge] (v9_0) -- (v8_0);
+        \draw[skipEdge] (v9_1) -- (v6_1);
+        \draw[skipEdge] (v9_2) -- (v3_1);
+        \draw[skipEdge] (v10_0) -- (v9_2);
+        \draw[skipEdge] (v11_0) -- (v10_0);
+        \draw[skipEdge] (v12_0) -- (v11_0);
+        \draw[skipEdge] (v12_1) -- (v9_2);
+        \draw[skipEdge] (v13_0) -- (v12_1);
+        \draw[skipEdge] (v14_0) -- (v13_0);
+        \draw[skipEdge] (v15_0) -- (v14_0);
+        \draw[skipEdge] (v15_1) -- (v12_1);
+        \draw[skipEdge] (v16_0) -- (v15_1);
+        \draw[skipEdge] (v17_0) -- (v16_0);
+        \draw[skipEdge] (v18_0) -- (v17_0);
+        \draw[skipEdge] (v18_1) -- (v15_1);
+        \draw[skipEdge] (v18_2) -- (v9_2);
+        \draw[skipEdge] (v19_0) -- (v18_2);
+        \draw[skipEdge] (v20_0) -- (v19_0);
+        \draw[skipEdge] (v21_0) -- (v20_0);
+        \draw[skipEdge] (v21_1) -- (v18_2);
+        \draw[skipEdge] (v22_0) -- (v21_1);
+        \draw[skipEdge] (v23_0) -- (v22_0);
+        \draw[skipEdge] (v24_0) -- (v23_0);
+        \draw[skipEdge] (v24_1) -- (v21_1);
+        \draw[skipEdge] (v25_0) -- (v24_1);
+        \draw[skipEdge] (v26_0) -- (v25_0);
+        \draw[skipEdge] (v27_0) -- (v26_0);
+        \draw[skipEdge] (v27_1) -- (v24_1);
+        \draw[skipEdge] (v27_2) -- (v18_2);
+        \draw[skipEdge] (v27_3) -- (v9_2);
+
+        \draw[skipEdge] (v28_0) -- (v27_3);
+        \draw[skipEdge] (v30_1) -- (v27_3);
+        \draw[skipEdge] (v36_2) -- (v27_3);
+        \draw[skipEdge] (v54_3) -- (v27_3);
+        \draw[skipEdge] (v81_4) -- (v27_3);
+        
+        \fill[white,path fading=faderight](26.0,-3) rectangle (27.4,6);
+	\end{pgfonlayer}
+
+    \begin{pgfonlayer}{main}
+        \begin{scope}[transparency group, opacity=0.2]
+			\draw[cPoolPath2,line width=11pt,rounded corners=0.1em,line cap=round] (v20_0.center) -- (v19_0.center) -- (v18_2.center) -- (v9_2.center) -- (v9_1.center) -- (v6_1.center) -- (v6_0.center);
+			\draw[cPoolPath2,line width=11pt,rounded corners=1em,line cap=round] (v20_0.center) -- (v19_0.center) -- (v18_2.center) -- (v9_2.center) -- (v9_1.center) -- (v6_1.center) -- (v6_0.center);
+		\end{scope}
+	\end{pgfonlayer}
+
+	\begin{pgfonlayer}{background}
+		\newcommand{\onerecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.08] ($(#1,-1)-(0.35,0.25)$) rectangle ($({#1},0)+(0.35,0.25)$);}
+
+		\foreach \x in {0,...,30}
+		{
+			\onerecs{\x};
+		}
+
+		\newcommand{\tworecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.03] ($(#1,-1)-(0.4,0.3)$) rectangle ($({#1+2},1)+(0.4,0.3)$);}
+
+		\foreach \x in {0,...,15}
+		{
+			\tworecs{3*\x};
+		}
+
+		\newcommand{\fourrecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.03] ($(#1,-1)-(0.44,0.4)$) rectangle ($({#1+8},2)+(0.44,0.4)$);}
+
+		\foreach \x in {0,...,6}
+		{
+			\fourrecs{9*\x};
+		}
+
+		\newcommand{\eightrecs}[1]{\draw[draw=none,rounded corners,fill=black,opacity=0.02] ($(#1,-1)-(0.48,0.45)$) rectangle ($({#1+26},3)+(0.48,0.45)$);}
+
+		\foreach \x in {0,...,1}
+		{
+			\eightrecs{27*\x};
+		}
+	\end{pgfonlayer}
+\end{tikzpicture}
+
+\end{document}
