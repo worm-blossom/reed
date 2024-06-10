@@ -175,12 +175,12 @@ const exp = (
       <>
         <PreviewScope>
           <P>
-            <Bib item="meyer2023sok">Prefix authentication schemes</Bib> — aka append-only logs, or transparency logs — are cryptographic schemes to efficiently authenticate total ordering between events. For any two events from a single event stream, you can provide a short digest to certify that one happened before the other (as opposed to them happening concurrently). <Def n="name" r="reed">Reed</Def> is a lightweigh specification for implementing the <Bib item="meyer2023better"><M>SLLS_3</M> scheme</Bib>, a scheme that produces shorter proofs than the traditional <Bib item="laurie2021rfc">certificate transparency logs</Bib>.
+            <Bib item="meyer2023sok">Prefix authentication schemes</Bib> — usually called <I>append-only logs</I>, or <I>transparency logs</I> — are cryptographic schemes to efficiently authenticate total ordering between events. For any two events from a single event stream, you can provide a short digest to certify that one happened before the other (as opposed to them happening concurrently). <Def n="name" r="Reed"/> is a lightweigh specification for implementing the <Bib item="meyer2023better"><M>SLLS_3</M> scheme</Bib>, a scheme that produces shorter proofs than the traditional <Bib item="laurie2021rfc">certificate transparency logs</Bib>.
           </P>
         </PreviewScope>
 
         <P>
-          <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo?tab=readme-ov-file#bamboo-">Bamboo</A> format. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
+          <Rb n="name"/> supersedes the earlier <A href="https://github.com/AljoschaMeyer/bamboo?tab=readme-ov-file#bamboo-">Bamboo</A> specification. <Rb n="name"/> is more efficient than Bamboo, more minimalistic in feature set, and generic over any particular cryptographic primitives. Bamboo was originally designed for efficient data replication, but I have since come to prefer <A href="https://willowprotocol.org/">more flexible replication technologies</A>, so <R n="name"/> sheds its data replication origins.
         </P>
 
         <P>
@@ -200,13 +200,13 @@ const exp = (
       src={<ResolveAsset asset={["graphics", "splash.svg"]} />}
     />
 
-    <Hsection n="introduction" title="Introduction" noNumbering>
+    <Hsection n="overview" title="Overview" noNumbering>
       <P>
         How about a dense one-paragraph summary, followed by a step-by-step explanation with pictures?
       </P>
 
       <P>
-        <Rb n="name"/> is a <Bib item="meyer2023sok">transitive prefix authentication scheme</Bib>: given a sequence of events, we build a directed acyclic graph (DAG) whose edges correspond to one object containing a secure hash of the other object (i.e., a Merkle-DAG). For each event, we assign a <Dfn>commitment vertex</Dfn> which has a path to the event, as well as paths to the commitment vertices of all earlier events. Given the commitment vertices of two events and the out-neighborhood of the path between them, we can reconstruct the hashes of all path vertices, thus proving that the first event did indeed happen before the other. <Rb n="name"/> guarantees that the out-neighborhoods of these paths are small, i.e., verification is efficient.
+        <Rb n="name"/> is a <Bib item="meyer2023sok">transitive prefix authentication scheme</Bib>: given a sequence of events, we construct a directed acyclic graph (DAG), whose edges correspond to one object containing a secure hash of the other object (i.e., a Merkle-DAG). For each event, we assign a <Dfn>commitment vertex</Dfn> which has a path to the event, as well as paths to the commitment vertices of all earlier events. Given the commitment vertices of two events and the out-neighborhood of the path between them, we can reconstruct the hashes of all path vertices, thus proving that the first event did indeed happen before the other. <Rb n="name"/> guarantees that the out-neighborhoods of these paths are small, i.e., verification is efficient.
       </P>
 
       <P>
@@ -227,14 +227,14 @@ const exp = (
       </Fig>
 
       <P>
-        These events will form the basis of a graph. To make sure that graph will give us efficient prefix authentication, we first need to add some additional vertices. You do not yet need to care <Em>how</Em> we determine these, we are just getting a feel for the general concepts here.
+        These events will form the basis of a graph. To ensure <Em>efficient</Em> prefix authentication, we first need to add some additional vertices. You do not yet need to care <Em>how</Em> we determine these, we are just getting a feel for the general concepts here.
       </P>
 
       <Fig
         n="fig_vertices"
         caption={<>
           <P>
-            We added some further vertices, according to rules we examine later.
+            We added some further vertices, according to rules we cover later.
           </P>
         </>}
       >
@@ -244,7 +244,7 @@ const exp = (
       </Fig>
 
       <P>
-        Next, we add edges to turn these vertices into a useful graph. We are building a Merkle-DAG, which means that each vertex is labeled with a secure hash of the concatenation of the labels of its <Sidenote note={<>This is a slight oversimplification, <R n="name"/> proper also concatenates some metadata into the labels.</>}>out-neighbors</Sidenote>. We need not draw the labels, since they are derived deterministically from the structure of the graph.
+        Next, we add edges to turn these vertices into a useful graph. We are building a Merkle-DAG, which means that each vertex is labeled with a secure hash of the concatenation of the labels of its <Sidenote note={<>This is a slight oversimplification, <R n="name"/> proper also concatenates some metadata into the labels.</>}>out-neighbors</Sidenote>. We need not visualize the labels, since they follow deterministically from the structure of the graph.
       </P>
 
       <Fig
@@ -268,7 +268,7 @@ const exp = (
         n="fig_commitments"
         caption={<>
           <P>
-            Events and their dedicated commitment vertices, grouped together. Not that each event is (trivially) reachable from its commitment vertex, and each commitment vertex is reachable from the commitment vertices of all later events.
+            Events and their dedicated commitment vertices, grouped together. Note that each event is (trivially) reachable from its commitment vertex, and each commitment vertex is reachable from the commitment vertices of all later events.
           </P>
         </>}
       >
@@ -295,7 +295,7 @@ const exp = (
       </Fig>
 
       <P>
-        Given the (labels of the) out-neighborhood of that path, we can reconstruct the labels of the path vertices. In particular, we can reconstruct the labels of the commitment vertices of events <M>8</M> and <M>2</M>.
+        Given the (labels of the) out-neighborhood of that path, we can reconstruct the labels of the path vertices. In particular, we can reconstruct the labels of the commitment vertices of events <M>2</M> and <M>8</M>.
       </P>
 
       <Pseudocode n="introduction_verification_example">
@@ -362,14 +362,14 @@ const exp = (
       </Pseudocode>
 
       <P>
-        If the hash function is secure, then it is computationally infeasible to <Em>fabricate</Em> labels that allow reconstructing a path between two vertices. Hence, the labels of the out-neighborhood of the path serve as an unforgeable proof that event <M>2</M> happened before event <M>8</M>. Neat!
+        If the hash function is secure, then it is computationally infeasible to <Em>fabricate</Em> labels that allow reconstructing a path between two vertices. Hence, the labels unforgeably certify that there <Em>is</Em> a path between the two vertices. In other words,  event <M>2</M> must have happened before event <M>8</M>. Neat!
       </P>
     </Hsection>
 
     <Hsection n="spec" title="Specification" noNumbering>
       <PreviewScope>
         <P>
-          We assume <DefFunction n="hash"/> to be a secure hash function that maps arbitrary bytestrings to fixed-with bytestrings. We call an output of <R n="hash"/> a <Def n="digest" rs="digests"/>.
+          We assume <DefFunction n="hash"/> to be a secure hash function that maps arbitrary bytestrings to fixed-width bytestrings. We call an output of <R n="hash"/> a <Def n="digest" rs="digests"/>.
         </P>
       </PreviewScope>
 
@@ -381,7 +381,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          The<Marginale>Compare <Rc n="fig_vertices"/>.</Marginale> set <DefType n="InnerVertices"/> is the set of all pairs <M>(<DefValue n="x"/>, <DefValue n="y"/>)</M> such that <NoWrap><M>1 \leq <R n="x"/> \leq <R n="length"/></M></NoWrap> and <M>3^<Curly><R n="y"/></Curly></M> divides <R n="x"/>. We call <M>(<R n="x"/>, 0)</M> the <Def n="commitment" r="commitment vertex" rs="commitment vertices"/><Marginale>Compare <Rc n="fig_commitments"/>.</Marginale> of <R n="event"/> <R n="x"/>.
+          The<Marginale>Compare <Rc n="fig_vertices"/>.</Marginale> set <DefType n="InnerVertices"/> is the set of all pairs <M>(<DefValue n="x"/>, <DefValue n="y"/>)</M> such that <NoWrap><M post=",">1 \leq <R n="x"/> \leq <R n="length"/></M></NoWrap> <M post=","><R n="y"/> \in \N_0</M> and <M>3^<Curly><R n="y"/></Curly></M> divides <R n="x"/> without remainder. We call <M>(<R n="x"/>, 0)</M> the <Def n="commitment" r="commitment vertex" rs="commitment vertices"/><Marginale>Compare <Rc n="fig_commitments"/>.</Marginale> of <R n="event"/> <R n="x"/>.
         </P>
       </PreviewScope>
 
@@ -443,9 +443,9 @@ const exp = (
         </P>
 
         <P>
-          Let <M>(<DefValue n="path_x1" r="x_1"/>, 0)</M> and <M>(<DefValue n="path_x2" r="x_2"/>, 0)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="path_x1"/> \lt <R n="path_x2"/></M> The <Def n="shortest" r="shortest path"/> from <M>(<R n="path_x2"/>, 0)</M> to <M>(<R n="path_x1"/>, 0)</M> is the unique sequence <M>(v_0, \ldots, v_k)</M> such that<Ul>
-            <Li><M post=",">v_0 = (<R n="path_x2"/>, 0)</M></Li>
-            <Li><M post=",">v_k = (<R n="path_x1"/>, 0)</M> and</Li>
+          Let <M>(<DefValue n="path_x1" r="x_1"/>, <DefValue n="path_y1" r="y_1"/>)</M> and <M>(<DefValue n="path_x2" r="x_2"/>, <DefValue n="path_y2" r="y_2"/>)</M> be in <R n="InnerVertices"/>, with <M post="."><R n="path_x1"/> \lt <R n="path_x2"/></M> The <Def n="shortest" r="shortest path"/> from <M>(<R n="path_x2"/>, <R n="path_y2"/>)</M> to <M>(<R n="path_x1"/>, <R n="path_y1"/>)</M> is the unique sequence <M>(v_0, \ldots, v_k)</M> such that<Ul>
+            <Li><M post=",">v_0 = (<R n="path_x2"/>, <R n="path_y1"/>)</M></Li>
+            <Li><M post=",">v_k = (<R n="path_x1"/>, <R n="path_y1"/>)</M> and</Li>
             <Li>
               for each <M post=",">0 \leq i \lt k</M> we have that<Ul>
                 <Li>if the x-coordinate of the <R n="jump"/> of <M post="">v_i</M> is strictly less than <R n="path_x1"/>, then <M>v_<Curly>i + 1</Curly></M> is the <R n="predecessor"/> of <M post=",">v_i</M> else</Li>
@@ -473,7 +473,7 @@ const exp = (
 
       <PreviewScope>
         <P>
-          The labels of the closed out-neighborhood of the <R n="shortest"/> between two <Rs n="commitment"/> serve as a certificate that one event happened before the other. Slightly more precisely: the certificate is obtained by following the shortest path from the greater event to the lesser, adding the <Sidenote note={<>For the final vertex, both out-neighbors are outside the path — add the <R n="predecessor"/> first and the <R n="jump"/> second.</>}>one</Sidenote> out-neighbor at each step that is not itself part of the path, and reversing the obtained sequence at the end. Formally:
+          The labels of the closed out-neighborhood of the <R n="shortest"/> between two <Rs n="commitment"/> serve as a certificate that one event happened before the other. Slightly more precisely: the certificate is obtained by following the shortest path from the <R n="commitment"/> of the greater event to the <R n="commitment"/> of the lesser event, adding the <Sidenote note={<>For the final vertex, both out-neighbors are outside the path — add the <R n="predecessor"/> first and the <R n="jump"/> second.</>}>one</Sidenote> out-neighbor at each step that is not itself part of the path, and reversing the obtained sequence at the end. Formally:
         </P>
 
         <P>
@@ -481,12 +481,6 @@ const exp = (
             <Li>
               starts with the <R n="label"/> of the <R n="jump"/> of <M>(<R n="cert_x1"/>, 0)</M> — or the <R n="hash"/> of the empty string, if <M post=","><R n="cert_x1"/> = 1</M> and which then
             </Li>
-            {/* <Li>
-              followed by the <R n="label"/> of the <R n="predecessor"/> of <M post=",">(<R n="cert_x1"/>, 0)</M> and which then
-            </Li> */}
-            {/* <Li>
-              continues with the <R n="label">labels</R> of the <Rs n="predecessor"/> of the elements of the <R n="shortest"/> from <M>(<R n="cert_x2"/>, 0)</M> to <M post="">(<R n="cert_x1"/>, 0)</M> in reverse order.
-            </Li> */}
             <Li>
               continues with exactly one <R n="digest"/> for each of the elements of the <R n="shortest"/> from <M>(<R n="cert_x2"/>, 0)</M> to <M>(<R n="cert_x1"/>, 0)</M> in reverse order: either the <R n="digest"/> of the <R n="jump"/> or the <R n="digest"/> of the <R n="predecessor"/>, whichever vertex is <Em>not</Em> the preceding vertex in the reversed <R n="shortest"/> (for the first vertex, always use the <R n="digest"/> of the <R n="predecessor"/>).
             </Li>
@@ -500,16 +494,16 @@ const exp = (
 
       <PreviewScope>
         <P>
-          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> path — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x2"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. Assuming abscence of hash collisions, this proves that the sequence of all events up to <R n="event"/> <R n="claim_x1"/> is a prefix of the sequence of all events up to <R n="event"/> <R n="claim_x2"/>. Hence, in particular, <R n="event"/> <R n="claim_x1"/> happened before <R n="event"/> <R n="claim_x2"/>.
+          Given a sequence <M><DefValue n="claimed" r="cert"/> = (d_0, d_1, \ldots, l_k)</M> of <Rs n="digest"/> and a claim that <R n="claimed"/> is the <R n="certificate"/> of two <Rs n="commitment"/> <M>(<DefValue n="claim_x1" r="x_1"/>, 0)</M> with <R n="label"/> <M><DefValue n="label_1"/></M> and <M>(<DefValue n="claim_x2" r="x_2"/>, 0)</M> with <R n="label"/> <M post=","><DefValue n="label_2"/></M> you can iteratively verify that claim. To verify, use the information in <R n="claimed"/> to compute the labels of the <R n="shortest"/> from <M>(<R n="claim_x2"/>, 0)</M> to <M>(<R n="claim_x1"/>, 0)</M> — successively and in reverse order. If the labels that you compute this way for <M>(<R n="claim_x1"/>, 0)</M> and <M>(<R n="claim_x2"/>, 0)</M> match <R n="label_1"/> and <R n="label_2"/> respectively, then you have successfully verified the <R n="certificate"/>. Assuming abscence of hash collisions, this proves that the sequence of all events up to <R n="event"/> <R n="claim_x1"/> is a prefix of the sequence of all events up to <R n="event"/> <R n="claim_x2"/>. Hence, in particular, <R n="event"/> <R n="claim_x1"/> happened before <R n="event"/> <R n="claim_x2"/>.
         </P>
       </PreviewScope>
 
       <P>
-        And that is how someone else can efficiently prove to you that some event happened before another. For the use-case of transparency logs, a logging authority would sign <Rs n="commitment"/>. Signed <Rs n="commitment"/> take on the role of <A href="https://www.rfc-editor.org/rfc/rfc9162.html#name-signed-tree-head-sth">signed tree heads</A> in that scenario.
+        And that is how someone else can efficiently prove to you that some event happened before another. For the use-case of transparency logs, a logging authority would sign <Rs n="commitment"/>. Signed <Rs n="commitment"/> would take on the role of <A href="https://www.rfc-editor.org/rfc/rfc9162.html#name-signed-tree-head-sth">signed tree heads</A> in that scenario.
       </P>
 
       <P>
-        For proofs of correctness and a detailed complexity analysis of the linking scheme that <R n="name"/> employs, see the <Bib item="meyer2023better">paper</Bib>.
+        For a detailed complexity analysis of the linking scheme that <R n="name"/> employs, see the <Bib item="meyer2023better">paper</Bib>.
       </P>
     </Hsection>
   </ArticleTemplate>
