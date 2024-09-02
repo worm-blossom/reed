@@ -136,20 +136,6 @@ function Alj(
   );
 }
 
-function Cjqf(
-  { children, inline }: { children?: Expressions; inline?: boolean },
-): Expression {
-  return (
-    <Wip
-      fg="#67595E" // Coffee pot
-      bg="#EED6D3" // Dusty rose
-      wrap={(_ctx, inner) => <>cjqf: {inner}</>} // Carson John Quentry Farmer :)
-      children={children}
-      inline={inline}
-    />
-  );
-}
-
 /*
 Create macros for figures (which includes theorem-like blocks).
 */
@@ -191,7 +177,7 @@ const exp = (
     authors={[
       {
         name: "Aljoscha Meyer",
-        email: <A href="https://github.com/AljoschaMeyer/reed">https://github.com/AljoschaMeyer/reed</A>,
+        email: <A href="https://github.com/worm-blossom/reed">https://github.com/worm-blossom/reed</A>,
       },
     ]}
   >

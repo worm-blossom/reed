@@ -1,3 +1,3 @@
 # Reed
 
-A specification for an efficient prefix-authentication schemes. See the rendered document at [https://aljoscha-meyer.de/reed/](https://aljoscha-meyer.de/reed/).
+A specification for an efficient prefix-authentication schemes. See the rendered document at [https://worm-blossom.github.io/reed/](hhttps://worm-blossom.github.io/reed/).
